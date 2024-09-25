@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .quiz-container, .end-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .end-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Pertanyaan:</h1>
+        <p id="question"></p>
+
+        <p id="hint" style="display:none;"><strong>Hint:</strong> <span id="hintText"></span></p>
+
+        <input type="text" id="answerInput" placeholder="Jawaban..." required>
+        <button onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <script>
+        // Hapus data sebelumnya setiap kali halaman dimuat ulang
+        localStorage.clear();
+
+        // Data Pertanyaan dan Jawaban
+        const questions = [
+            {
+                question: 'Kamu sayang ga sama aku, hehe...',
+                answer: 'sayangggggggggggggggg',
+                hint: 'pake huruf kecil semua ya sayang dan huruf g nya sebanyak tanggal kita jadian'
+            },
+            {
+                question: 'Aku ganteng ga?',
+                answer: 'iya',
+                hint: 'pake nanya, iya lah'
+            },
+            {
+                question: 'Kita ngedate pertama tanggal berapaaaaa?',
+                answer: '30 november 2023',
+                hint: 'dd month yyyy'
+            },
+            {
+                question: 'Kita nontonnya di seat berapa sayang?',
+                answer: 'c10 dan c11',
+                hint: 'array [2] dalam nama kucing aku + michi date (-)'
+            },
+            {
+                question: 'Kita nontonnya di studio berapa?',
+                answer: '5',
+                hint: 'jawabnya pake angka, hintnya TOS!!!'
+            },
+            {
+                question: 'Michi lahir tanggal berapa?',
+                answer: '03 maret 2023',
+                hint: 'dd month yyyy'
+            },
+            {
+                question: 'Civitas UGM non-mahasiswa yang kamu sohib bet annjay (katanya)?',
+                answer: 'satpam',
+                hint: ''
+            },
+            {
+                question: 'Dimana tempat pertama kita ketemu?',
+                answer: 'FKKMK',
+                hint: 'Fakultasnya disingkat dan huruf besar semua'
+            }
+        ];
+
+        let currentQuestion = 0;
+        let attempts = 0;
+
+        // Tampilkan pertanyaan saat ini
+        function displayQuestion() {
+            document.getElementById('hint').style.display = 'none';
+
+            if (currentQuestion >= questions.length) {
+                displayEndScreen();
+                return;
+            }
+
+            document.getElementById('question').textContent = questions[currentQuestion].question;
+        }
+
+        // Tampilkan layar akhir
+        function displayEndScreen() {
+            document.body.innerHTML = `
+                <div class="end-container">
+                    <h1>WAAAHHH TOMMY BANGGAAA SAMA KAKA ERYY!!!!</h1>
+                    <p>Selamat ya kaka ery sudah menyelesaikan quizzzz dari aku! :D Sebagai hadiahnya Tommy bakal kasih kaka Ery hadiah (yeyyyy!!!). Tommy udah taruh hadiahnya di suatu tempat, kaka Ery harus cari tahu tempatnya dimana yaa!!! Cluenya adalah 2 pertanyaan terakhir quiz ini tadiii, hehe!!! sama aku punya kata magic buat kaka eryyy 'ery' itu kata magicnya buat accept hadiahnya hehehe</p>
+                    <button onclick="restartQuiz()">Ulang Quiz</button>
+                </div>
+            `;
+        }
+
+        // Fungsi submit jawaban
+        function submitAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.toLowerCase();
+            const correctAnswer = questions[currentQuestion].answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                alert("yeyy jawabannya bener, ayo lanjut!!!!");
+                currentQuestion++;
+                attempts = 0;
+                document.getElementById('answerInput').value = '';
+                displayQuestion();
+            } else {
+                alert("jawaban salah, ulangi lagi ya sayang");
+                attempts++;
+
+                if (attempts >= 5) {
+                    document.getElementById('hint').style.display = 'block';
+                    document.getElementById('hintText').textContent = questions[currentQuestion].hint;
+                }
+            }
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            attempts = 0;
+            location.reload(); // Reload page to restart the quiz
+        }
+
+        // Mulai Quiz
+        displayQuestion();
+    </script>
+</body>
+</html>
